@@ -7,6 +7,7 @@ import java.math.*;
 
 public class TicTacToe implements ActionListener
 {
+	//Setting the variables.
 	Random random = new Random();
 	JFrame frame = new JFrame();
 	JPanel title_panel = new JPanel();
@@ -17,6 +18,7 @@ public class TicTacToe implements ActionListener
 	
 	TicTacToe()
 	{
+		//Setting the board and printing sprites.
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(800,800);
 		frame.getContentPane().setBackground(new Color(50,50,50));
@@ -36,6 +38,7 @@ public class TicTacToe implements ActionListener
 		button_panel.setLayout(new GridLayout(3,3));
 		button_panel.setBackground(new Color(150,150,150));
 		
+		//Creating 9 buttons.
 		for(int i=0;i<9;i++)
 		{
 			buttons[i] = new JButton();
@@ -52,10 +55,10 @@ public class TicTacToe implements ActionListener
 		frame.add(button_panel);
 	}
 	
+	//Onclick button action.
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		
 		for(int i=0;i<9;i++)
 		{
 			if(e.getSource()==buttons[i])
@@ -63,7 +66,7 @@ public class TicTacToe implements ActionListener
 				
 				if(buttons[i].getText()=="")
 				{
-					
+					//Player making the move.
 					buttons[i].setText("X");
 					
 					textfield.setText("O turn");
@@ -73,8 +76,8 @@ public class TicTacToe implements ActionListener
 		}
 		if(textfield.getText()!="You won")
 		{
+			//computer making the move.
 			buttons[computerMove()].setText("O");
-			
 			textfield.setText("X turn");
 			check();
 		}
@@ -83,52 +86,50 @@ public class TicTacToe implements ActionListener
 	
 	public int computerMove()
 	{
-	  int bestScore = Integer.MIN_VALUE;
-	  int move = 0;
-	  String[] board = {"","","","","","","","",""};
-	  for (int i = 0; i < 9; i++) 
-	  {
-		  board[i]=buttons[i].getText();
-	      if (board[i].isEmpty()) 
-	      {
-	        board[i] = "O";
-	        int score = minimax( 0, false, board);
-	        board[i] = "";
-	        
-	        System.out.print("("+score+")");
-        	
-	        if (score > bestScore) 
-	        {
-	          bestScore = score;  
-	          move = i;
-	        }
-	        
-	        
-	      }
-	  }
-	  System.out.println("\n");
-	  for(int i=0;i<9;i++)
-		  board[i]="";
-	  
-	  return move;
+		//Creating the way computer moves + start of the minimax algorithm.
+		int bestScore = Integer.MIN_VALUE;
+		int move = 0;
+		//Creating identical board.
+		String[] board = {"","","","","","","","",""};
+		for (int i = 0; i < 9; i++) 
+		{
+			board[i]=buttons[i].getText();
+			if (board[i].isEmpty()) 
+			{
+				board[i] = "O";
+				int score = minimax( 0, false, board);
+				board[i] = "";
+				
+				System.out.print("("+score+")");
+				  	
+				if (score > bestScore) 
+				{
+					bestScore = score;  
+					move = i;
+				}  
+			}
+		}
+		System.out.println("\n");
+		for(int i=0;i<9;i++)
+		board[i]="";
+		return move;
 	}
 	//#########MINIMAX################
 	@SuppressWarnings("unused")
 	public int minimax(int depth, boolean isMax, String[] board)
 	{
+		//Checking for the win.
 		 int result = checkMinimax(board);
-		 
 		 if (result != 0) 
 			 return result;
-		 
-		  
 		
-		 if (isMax) {
+		 if (isMax) 
+		 {
 		    int bestScore = Integer.MIN_VALUE;
-		    for (int i = 0; i < 9; i++) {
-		      
-		        // Is the spot available?
-		        if (board[i].isEmpty()) {
+		    for (int i = 0; i < 9; i++) 
+		    {
+		        if (board[i].isEmpty()) 
+		        {
 		          board[i] = "O";
 		          int score = minimax( depth + 1, false, board);
 		          board[i] = "";
@@ -141,26 +142,22 @@ public class TicTacToe implements ActionListener
 		  } 
 		 else 
 		 {
-			
 		    int bestScore = Integer.MAX_VALUE;
-		    for (int i = 0; i < 9; i++) {
-		      
-		        // Is the spot available?
-
-		        if (board[i].isEmpty()) {
-		        	
+		    for (int i = 0; i < 9; i++) 
+		    {
+		        if (board[i].isEmpty()) 
+		        {
 			        board[i] = "X";
 			        int score = minimax(depth + 1, true, board);
 			        board[i] = "";
 			        bestScore = Math.min(score, bestScore);
-		          
 		        }
-		      
 		  	}
 		    return bestScore;
 		 }
 	}
 	
+	//Checking if minimax board has a winner.
 	public int checkMinimax(String[] board)
 	{
 		if((board[0]=="X"&&board[1]=="X"&&board[2]=="X")
@@ -181,12 +178,10 @@ public class TicTacToe implements ActionListener
 		||(board[0]=="O"&&board[4]=="O"&&board[8]=="O")
 		||(board[2]=="O"&&board[4]=="O"&&board[6]=="O"))
 			return 1;
-		
-		
 		return 0;
 	}
 	
-	
+	//Checking if real board has a winner.
 	public void check()
 	{
 		if(
@@ -285,17 +280,15 @@ public class TicTacToe implements ActionListener
 			(buttons[6].getText()=="O")
 			)
 			oWins(2,4,6);
-		
 	}
+	
 	public void xWins(int a, int b, int c)
 	{
 		buttons[a].setBackground(Color.GREEN);
 		buttons[b].setBackground(Color.GREEN);
 		buttons[c].setBackground(Color.GREEN);
-		
 		for(int i=0;i<9;i++)
 			buttons[i].setEnabled(false);
-		
 		textfield.setText("You won");
 	}
 	public void oWins(int a, int b, int c)
@@ -303,10 +296,8 @@ public class TicTacToe implements ActionListener
 		buttons[a].setBackground(Color.GREEN);
 		buttons[b].setBackground(Color.GREEN);
 		buttons[c].setBackground(Color.GREEN);
-		
 		for(int i=0;i<9;i++)
 			buttons[i].setEnabled(false);
-		
 		textfield.setText("Computer won");
 	}
 }
